@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>설명문 수업 활동</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/tabler-icons.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#fff;--bg2:#f5f5f4;--bg3:#eeece9;
+  --text:#1a1a1a;--text2:#555;--text3:#999;
+  --border:rgba(0,0,0,.12);--border2:rgba(0,0,0,.22);
+  --r:8px;--rl:12px;
+  --blue:#185fa5;--blue-bg:#e6f1fb;
+  --green:#3b6d11;--green-bg:#eaf3de;
+  --amber:#854f0b;--amber-bg:#faeeda;
+  --red:#a32d2d;--red-bg:#fcebeb;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#1c1c1a;--bg2:#252523;--bg3:#2e2e2b;
+    --text:#f0ede8;--text2:#aaa;--text3:#666;
+    --border:rgba(255,255,255,.12);--border2:rgba(255,255,255,.22);
+    --blue:#85b7eb;--blue-bg:#0c2a45;
+    --green:#c0dd97;--green-bg:#173404;
+    --amber:#fac775;--amber-bg:#412402;
+    --red:#f09595;--red-bg:#501313;
+  }
+}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg3);color:var(--text);min-height:100vh}
+
+/* ── 전체 레이아웃 ── */
+.app{max-width:760px;margin:0 auto;padding:1.25rem 1rem 4rem}
+
+/* ── 헤더 ── */
+.app-header{background:var(--bg);border-bottom:0.5px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:1.25rem;border-radius:var(--rl);border:0.5px solid var(--border)}
+.app-title{font-size:17px;font-weight:500;color:var(--text)}
+.app-subtitle{font-size:12px;color:var(--text2);margin-top:2px}
+
+/* ── 설정 패널 ── */
+.setup-panel{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--rl);padding:16px 18px;margin-bottom:1.25rem}
+.setup-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.setup-label{font-size:13px;color:var(--text2);min-width:60px}
+.team-input{padding:6px 10px;border-radius:var(--r);border:0.5px solid var(--border2);background:var(--bg);font-size:13px;color:var(--text);width:160px}
+.team-input:focus{outline:none;border-color:var(--blue)}
+.timer-select{padding:6px 10px;border-radius:var(--r);border:0.5px solid var(--border2);background:var(--bg);font-size:13px;color:var(--text);cursor:pointer}
+.setup-divider{width:1px;height:24px;background:var(--border);margin:0 4px}
+
+/* ── 타이머 ── */
+.timer-bar{display:flex;align-items:center;gap:10px;padding:10px 16px;border-radius:var(--r);background:var(--bg2);border:0.5px solid var(--border);margin-bottom:1rem;flex-wrap:wrap}
+.timer-display{font-size:28px;font-weight:500;color:var(--text);min-width:64px;font-variant-numeric:tabular-nums}
+.timer-display.urgent{color:#a32d2d}
+.timer-btn{padding:5px 12px;border-radius:var(--r);border:0.5px solid var(--border2);background:var(--bg);font-size:12px;cursor:pointer;color:var(--text2);display:inline-flex;align-items:center;gap:4px}
+.timer-btn:hover{background:var(--bg3)}
+.timer-prog-wrap{flex:1;height:5px;background:var(--border);border-radius:3px;overflow:hidden;min-width:80px}
+.timer-prog{height:5px;border-radius:3px;background:var(--blue);transition:width .5s linear}
+.timer-prog.urgent{background:#a32d2d}
+
+/* ── 단계 탭 ── */
+.step-tabs{display:flex;gap:0;margin-bottom:1.25rem;border-radius:var(--rl);overflow:hidden;border:0.5px solid var(--border)}
+.step-tab{flex:1;padding:10px 8px;text-align:center;font-size:13px;cursor:pointer;background:var(--bg2);color:var(--text2);border:none;border-right:0.5px solid var(--border);transition:all .15s;display:flex;align-items:center;justify-content:center;gap:6px}
+.step-tab:last-child{border-right:none}
+.step-tab.active{background:var(--text);color:var(--bg);font-weight:500}
+.step-tab.locked{color:var(--text3);cursor:not-allowed}
+.step-tab .step-check{width:16px;height:16px;border-radius:50%;background:var(--green-bg);color:var(--green);font-size:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+/* ── 설명문 탭 ── */
+.essay-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem}
+.etab{padding:5px 12px;border-radius:14px;border:0.5px solid var(--border2);background:var(--bg);font-size:12px;cursor:pointer;color:var(--text2)}
+.etab.active{background:var(--text);color:var(--bg);border-color:var(--text)}
+
+/* ── 액션 행 ── */
+.act-row{display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap;align-items:center}
+.btn{padding:7px 14px;border-radius:var(--r);border:0.5px solid var(--border2);background:var(--bg);font-size:13px;cursor:pointer;color:var(--text);display:inline-flex;align-items:center;gap:5px;transition:background .12s}
+.btn:hover{background:var(--bg2)}
+.btn:active{transform:scale(.98)}
+.btn.locked{color:var(--text3);border-color:var(--border);cursor:not-allowed}
+.btn.primary{background:var(--text);color:var(--bg);border-color:var(--text)}
+.btn.primary:hover{opacity:.88}
+.score-pill{font-size:12px;color:var(--text2);padding:5px 10px;border-radius:12px;background:var(--bg2);border:0.5px solid var(--border)}
+
+/* ── 배치 활동 ── */
+.pool-label{font-size:12px;color:var(--text2);margin-bottom:5px;font-weight:500}
+.pool{min-height:60px;border-radius:var(--rl);border:1.5px dashed var(--border2);padding:10px;display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1.25rem;transition:background .12s}
+.pool.drag-over{background:var(--blue-bg);border-color:var(--blue)}
+.zones{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1rem}
+@media(max-width:480px){.zones{grid-template-columns:1fr}}
+.zone{border-radius:var(--rl);border:1.5px dashed var(--border2);min-height:110px;padding:10px;display:flex;flex-direction:column;gap:6px;transition:background .12s}
+.zone.drag-over{background:var(--bg2);border-color:var(--border2)}
+.zone-label{font-size:12px;font-weight:500;text-align:center;padding:3px 0 7px;border-bottom:0.5px solid var(--border);margin-bottom:2px;display:flex;align-items:center;justify-content:center;gap:5px}
+.zone-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.card{padding:9px 11px;border-radius:var(--r);border:0.5px solid var(--border2);background:var(--bg);font-size:13px;line-height:1.65;color:var(--text);cursor:grab;user-select:none;transition:border-color .12s;touch-action:none}
+.card:hover{border-color:var(--border2)}
+.card.dragging{opacity:.35;cursor:grabbing}
+.card.correct{border-color:var(--green);background:var(--green-bg);color:var(--green);cursor:default}
+.card.wrong{border-color:var(--red);background:var(--red-bg);color:var(--red)}
+.notice-empty{font-size:12px;color:var(--text3);padding:8px;text-align:center}
+
+/* 오답 해설 */
+.explain-tag{font-size:11px;color:var(--text3);margin-top:4px;font-style:italic}
+
+/* ── 표지어 퀴즈 ── */
+.passage{display:flex;flex-direction:column;gap:12px}
+.para-card{padding:13px 15px;border-radius:var(--r);border:0.5px solid var(--border);background:var(--bg)}
+.para-num{font-size:11px;color:var(--text3);margin-bottom:6px}
+.para-text{font-size:14px;line-height:1.85;color:var(--text)}
+.word-span{cursor:pointer;border-radius:3px;padding:1px 2px;border-bottom:1.5px solid transparent;transition:background .1s}
+.word-span:hover{background:var(--blue-bg);border-bottom-color:var(--blue)}
+.word-span.state-correct{background:var(--green-bg);color:var(--green);font-weight:500;border-bottom:2px solid var(--green);cursor:default}
+.word-span.state-revealed{background:var(--amber-bg);color:var(--amber);font-weight:500;border-bottom:2px solid var(--amber);cursor:default}
+.m-badge{display:inline-block;padding:1px 6px;border-radius:8px;font-size:11px;font-weight:500;margin-left:3px;vertical-align:middle}
+
+/* ── 팝업 ── */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;z-index:999}
+.popup{background:var(--bg);border:0.5px solid var(--border2);border-radius:var(--rl);padding:20px 22px;width:min(360px,92vw)}
+.popup-word{font-size:17px;font-weight:500;margin-bottom:3px}
+.popup-sub{font-size:12px;color:var(--text3);margin-bottom:14px}
+.method-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.m-btn{padding:9px 8px;border-radius:var(--r);border:0.5px solid var(--border2);background:var(--bg);font-size:13px;cursor:pointer;color:var(--text2);text-align:left;display:flex;flex-direction:column;gap:2px}
+.m-btn:hover{background:var(--bg2)}
+.m-btn .mn{display:flex;align-items:center;gap:5px;font-size:13px}
+.m-btn .md{font-size:10px;color:var(--text3);font-style:italic;padding-left:13px}
+.m-btn.ok{background:var(--green-bg);border-color:var(--green);color:var(--green)}
+.m-btn.ng{background:var(--red-bg);border-color:var(--red);color:var(--red)}
+.popup-fb{margin-top:10px;padding:9px 12px;border-radius:var(--r);font-size:13px;text-align:center;display:none}
+.fb-ok{background:var(--green-bg);color:var(--green)}
+.fb-ng{background:var(--red-bg);color:var(--red)}
+.popup-close{margin-top:12px;width:100%;padding:8px;border-radius:var(--r);border:0.5px solid var(--border);background:var(--bg);font-size:13px;cursor:pointer;color:var(--text2)}
+.popup-close:hover{background:var(--bg2)}
+
+/* ── 결과 ── */
+.result-box{border:0.5px solid var(--border);border-radius:var(--rl);overflow:hidden;margin-top:1rem}
+.result-head{padding:10px 16px;background:var(--bg2);border-bottom:0.5px solid var(--border);font-size:13px;font-weight:500}
+.result-body{padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.result-zone{font-size:12px;font-weight:500;margin-bottom:4px}
+.result-para{padding:7px 10px;border-radius:var(--r);font-size:13px;line-height:1.6;border-left:3px solid transparent;margin-bottom:4px}
+.result-explain{font-size:11px;font-style:italic;margin-top:3px;opacity:.8}
+
+/* 정답 목록 */
+.ans-list{display:flex;flex-direction:column;gap:6px;margin-top:1rem}
+.ans-row{display:flex;align-items:center;gap:10px;padding:6px 10px;border-radius:var(--r);background:var(--bg2);font-size:13px}
+.ans-word{font-weight:500;min-width:110px}
+.ans-check{margin-left:auto;font-size:12px;color:var(--green)}
+
+/* 완료 배너 */
+.complete-banner{padding:11px 16px;border-radius:var(--r);background:var(--green-bg);border:0.5px solid var(--green);font-size:14px;color:var(--green);font-weight:500;margin-bottom:1rem;display:none;align-items:center;gap:8px}
+.complete-banner.show{display:flex}
+
+/* 점수판 */
+.scoreboard{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--rl);padding:16px 18px;margin-top:1.25rem}
+.scoreboard h3{font-size:14px;font-weight:500;margin-bottom:12px;color:var(--text)}
+.score-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.score-card{padding:12px 14px;border-radius:var(--r);background:var(--bg2);border:0.5px solid var(--border);text-align:center}
+.score-card .sc-team{font-size:12px;color:var(--text2);margin-bottom:6px}
+.score-card .sc-score{font-size:26px;font-weight:500;color:var(--text)}
+.score-card .sc-label{font-size:11px;color:var(--text3)}
+
+/* lock tip */
+.lock-tip{font-size:12px;color:var(--text3);padding:5px 10px;border-radius:var(--r);background:var(--bg2);display:none;align-items:center;gap:4px}
+.lock-tip.show{display:inline-flex}
+
+/* ── 3단계 글쓰기 ── */
+.writing-wrap{display:flex;flex-direction:column;gap:14px}
+.context-card{padding:12px 15px;border-radius:var(--r);border:0.5px solid var(--border);background:var(--bg);font-size:13px;line-height:1.8;color:var(--text2)}
+.context-label{font-size:11px;font-weight:500;margin-bottom:5px}
+.context-card.above .context-label{color:var(--blue)}
+.context-card.below .context-label{color:var(--amber)}
+.write-box{border-radius:var(--r);border:1.5px solid var(--border2);background:var(--bg);overflow:hidden}
+.write-box-head{padding:10px 14px;background:var(--bg2);border-bottom:0.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.method-chips{display:flex;gap:6px;flex-wrap:wrap}
+.method-chip{padding:3px 10px;border-radius:10px;font-size:12px;font-weight:500}
+.marker-chips{display:flex;gap:5px;flex-wrap:wrap;padding:8px 14px;border-bottom:0.5px solid var(--border)}
+.marker-chip{padding:2px 8px;border-radius:8px;font-size:12px;background:var(--bg2);border:0.5px solid var(--border);color:var(--text2);cursor:pointer;transition:all .12s}
+.marker-chip:hover{background:var(--bg3)}
+.marker-chip.used{background:var(--green-bg);border-color:var(--green);color:var(--green)}
+.write-textarea{width:100%;min-height:120px;padding:12px 14px;border:none;background:var(--bg);font-size:14px;line-height:1.8;color:var(--text);resize:vertical;font-family:inherit}
+.write-textarea:focus{outline:none}
+.write-footer{padding:8px 14px;background:var(--bg2);border-top:0.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.char-count{font-size:12px;color:var(--text3)}
+.hint-box{padding:9px 13px;border-radius:var(--r);background:var(--blue-bg);border:0.5px solid var(--border);font-size:12px;color:var(--blue);line-height:1.6}
+.compare-wrap{display:flex;flex-direction:column;gap:10px;margin-top:4px}
+.compare-card{border-radius:var(--r);border:0.5px solid var(--border);overflow:hidden}
+.compare-head{padding:8px 13px;font-size:12px;font-weight:500;border-bottom:0.5px solid var(--border)}
+.compare-body{padding:11px 13px;font-size:13px;line-height:1.8;white-space:pre-wrap}
+.marker-found{background:var(--green-bg);color:var(--green);border-radius:2px;font-weight:500}
+.selfcheck-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 0}
+.selfcheck-label{font-size:12px;color:var(--text2)}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- 헤더 -->
+<div class="app-header">
+  <div>
+    <div class="app-title">설명문 수업 활동</div>
+    <div class="app-subtitle">1단계: 문단 배치 → 2단계: 표지어 퀴즈</div>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+    <input class="team-input" id="team-input" placeholder="모둠명 입력" maxlength="12">
+    <select class="timer-select" id="timer-select">
+      <option value="0">타이머 없음</option>
+      <option value="120">2분</option>
+      <option value="180" selected>3분</option>
+      <option value="300">5분</option>
+      <option value="600">10분</option>
+    </select>
+  </div>
+</div>
+
+<!-- 타이머 -->
+<div class="timer-bar" id="timer-bar" style="display:none">
+  <span class="timer-display" id="timer-display">3:00</span>
+  <div class="timer-prog-wrap"><div class="timer-prog" id="timer-prog" style="width:100%"></div></div>
+  <button class="timer-btn" onclick="startTimer()"><i class="ti ti-player-play" aria-hidden="true"></i> 시작</button>
+  <button class="timer-btn" onclick="pauseTimer()"><i class="ti ti-player-pause" aria-hidden="true"></i> 일시정지</button>
+  <button class="timer-btn" onclick="resetTimer()"><i class="ti ti-refresh" aria-hidden="true"></i> 초기화</button>
+</div>
+
+<!-- 설명문 탭 -->
+<div class="essay-tabs" id="essay-tabs"></div>
+
+<!-- 단계 탭 -->
+<div class="step-tabs">
+  <button class="step-tab active" id="stab-0" onclick="goStep(0)">
+    <i class="ti ti-layout-cards" aria-hidden="true"></i> 1단계 — 문단 배치
+  </button>
+  <button class="step-tab locked" id="stab-1" onclick="goStep(1)">
+    <i class="ti ti-lock" id="stab1-icon" aria-hidden="true"></i> 2단계 — 표지어 퀴즈
+  </button>
+  <button class="step-tab locked" id="stab-2" onclick="goStep(2)">
+    <i class="ti ti-lock" id="stab2-icon" aria-hidden="true"></i> 3단계 — 문단 쓰기
+  </button>
+</div>
+
+<!-- ───────────── 1단계: 배치 활동 ───────────── -->
+<div id="step-0">
+  <div class="act-row">
+    <button class="btn locked" id="check-btn" onclick="checkArrange()">
+      <i class="ti ti-check" id="check-icon" aria-hidden="true"></i> 확인하기
+    </button>
+    <button class="btn" onclick="resetArrange()"><i class="ti ti-refresh" aria-hidden="true"></i> 다시하기</button>
+    <span class="score-pill" id="arr-score">0 / 0 배치됨</span>
+    <span class="lock-tip" id="arr-lock-tip"><i class="ti ti-info-circle" aria-hidden="true"></i> 모두 배치해야 확인할 수 있어요</span>
+  </div>
+
+  <div class="pool-label">문단 카드 — 여기서 끌어다 놓으세요</div>
+  <div class="pool" id="pool"
+    ondragover="onDragOver(event,this)"
+    ondrop="onDrop(event,'pool')"
+    ondragleave="onDragLeave(this)"></div>
+
+  <div class="zones">
+    <div class="zone" id="zone-처음"
+      ondragover="onDragOver(event,this)"
+      ondrop="onDrop(event,'처음')"
+      ondragleave="onDragLeave(this)">
+      <div class="zone-label" style="color:var(--blue)">
+        <div class="zone-dot" style="background:var(--blue)"></div>처음
+      </div>
+    </div>
+    <div class="zone" id="zone-중간"
+      ondragover="onDragOver(event,this)"
+      ondrop="onDrop(event,'중간')"
+      ondragleave="onDragLeave(this)">
+      <div class="zone-label" style="color:var(--green)">
+        <div class="zone-dot" style="background:var(--green)"></div>중간
+      </div>
+    </div>
+    <div class="zone" id="zone-끝"
+      ondragover="onDragOver(event,this)"
+      ondrop="onDrop(event,'끝')"
+      ondragleave="onDragLeave(this)">
+      <div class="zone-label" style="color:var(--amber)">
+        <div class="zone-dot" style="background:var(--amber)"></div>끝
+      </div>
+    </div>
+  </div>
+
+  <div id="arr-result"></div>
+</div>
+
+<!-- ───────────── 2단계: 표지어 퀴즈 ───────────── -->
+<div id="step-1" style="display:none">
+  <div class="complete-banner" id="complete-banner">
+    <i class="ti ti-circle-check" aria-hidden="true"></i>
+    모든 표지어를 맞혔어요! 정답 목록을 확인할 수 있어요.
+  </div>
+
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem;padding:10px 14px;border-radius:var(--r);background:var(--bg2);border:0.5px solid var(--border);flex-wrap:wrap">
+    <div style="text-align:center;min-width:44px">
+      <div style="font-size:22px;font-weight:500" id="sc-found">0</div>
+      <div style="font-size:11px;color:var(--text2)">맞힘</div>
+    </div>
+    <div style="width:1px;height:32px;background:var(--border)"></div>
+    <div style="text-align:center;min-width:44px">
+      <div style="font-size:22px;font-weight:500" id="sc-total">0</div>
+      <div style="font-size:11px;color:var(--text2)">전체</div>
+    </div>
+    <div style="width:1px;height:32px;background:var(--border)"></div>
+    <div style="font-size:13px;color:var(--text2);flex:1" id="sc-msg">표지어를 클릭해 설명 방법을 맞혀 보세요!</div>
+  </div>
+
+  <div class="act-row">
+    <button class="btn locked" id="reveal-btn" onclick="revealMarkers()">
+      <i class="ti ti-lock" id="reveal-icon" aria-hidden="true"></i>
+      <span id="reveal-label">정답 공개</span>
+    </button>
+    <button class="btn" onclick="teacherReveal()" style="color:var(--text3);font-size:12px" title="모둠 토의 후 교사가 직접 공개할 때 사용">
+      <i class="ti ti-eye" aria-hidden="true"></i> 교사 공개
+    </button>
+    <button class="btn" onclick="resetMarkers()"><i class="ti ti-refresh" aria-hidden="true"></i> 다시하기</button>
+    <span class="lock-tip" id="quiz-lock-tip"><i class="ti ti-info-circle" aria-hidden="true"></i> 모두 맞혀야 열려요</span>
+  </div>
+
+  <div class="passage" id="passage"></div>
+  <div id="marker-result"></div>
+</div>
+
+<!-- ───────────── 3단계: 문단 쓰기 ───────────── -->
+<div id="step-2" style="display:none">
+  <div id="writing-area"></div>
+</div>
+
+<!-- 점수판 -->
+<div class="scoreboard" id="scoreboard">
+  <h3><i class="ti ti-trophy" aria-hidden="true" style="margin-right:6px"></i>모둠 점수판</h3>
+  <div class="score-grid" id="score-grid">
+    <div style="font-size:13px;color:var(--text3);padding:8px 0">점수를 새로고침하면 모든 모둠 점수를 볼 수 있어요.</div>
+  </div>
+  <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+    <button class="btn primary" id="load-btn" onclick="loadScores()"><i class="ti ti-trophy" aria-hidden="true"></i> 점수 확인</button>
+    <button class="btn" onclick="clearScores()"><i class="ti ti-trash" aria-hidden="true"></i> 초기화</button>
+  </div>
+</div>
+
+</div><!-- /app -->
+
+<!-- 팝업 -->
+<div class="overlay" id="popup" style="display:none" onclick="onOverlayClick(event)">
+  <div class="popup">
+    <div class="popup-word" id="pw-word"></div>
+    <div class="popup-sub">이 표지어는 어떤 설명 방법인가요?</div>
+    <div class="method-grid" id="pw-grid"></div>
+    <div class="popup-fb" id="pw-fb"></div>
+    <button class="popup-close" onclick="closePopup()">닫기</button>
+  </div>
+</div>
+
+<!-- 타이머 종료 알림 -->
+<div class="overlay" id="timer-end-popup" style="display:none">
+  <div class="popup" style="text-align:center">
+    <div style="font-size:40px;margin-bottom:10px">⏰</div>
+    <div style="font-size:18px;font-weight:500;margin-bottom:6px">시간 종료!</div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:16px">활동을 마무리하세요.</div>
+    <button class="btn primary" onclick="closeTimerEnd()" style="width:100%;justify-content:center">확인</button>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════
+// 데이터
+// ════════════════════════════════════════
+const METHOD_INFO={
+  "정의":{core:"~이란, ~을 말한다",desc:"대상의 뜻이나 본질을 밝힘",label:"정의"},
+  "예시":{core:"예를 들면, 예컨대",desc:"구체적 사례를 들어 설명함",label:"예시"},
+  "비교":{core:"마찬가지로, 공통점",desc:"둘 이상 대상의 공통점을 밝힘",label:"비교"},
+  "대조":{core:"이와 다르게, 반면",desc:"둘 이상 대상의 차이점을 밝힘",label:"대조"},
+  "분류":{core:"~로 분류된다",desc:"여러 대상을 공통 속성으로 묶어 그룹을 만듦",label:"묶어서 그룹 만들기"},
+  "구분":{core:"~로 구분된다, 기준으로",desc:"하나의 대상을 기준에 따라 나눔",label:"기준으로 나누기"},
+  "인과":{core:"때문에, 그 결과",desc:"원인과 결과의 관계를 밝힘",label:"인과"},
+  "분석":{core:"로 구성된다, 로 이루어진다",desc:"전체를 구성 요소로 쪼개 설명함",label:"분석"},
+};
+const METHODS=Object.keys(METHOD_INFO);
+const MC={"정의":"#534AB7","예시":"#0F6E56","비교":"#185FA5","대조":"#993C1D","분류":"#993556","구분":"#BA7517","인과":"#639922","분석":"#A32D2D"};
+const MB={"정의":"#EEEDFE","예시":"#E1F5EE","비교":"#E6F1FB","대조":"#FAECE7","분류":"#FBEAF0","구분":"#FAEEDA","인과":"#EAF3DE","분석":"#FADBD8"};
+
+const ZONE_C={"처음":"var(--blue)","중간":"var(--green)","끝":"var(--amber)"};
+const ZONE_BG={"처음":"var(--blue-bg)","중간":"var(--green-bg)","끝":"var(--amber-bg)"};
+
+const EXPLAINS={
+  "처음":"글을 쓰게 된 동기·목적, 설명 대상 제시, 독자의 관심 유도가 담긴 단계예요.",
+  "중간":"대상의 특성·종류·구조 등 구체적 정보와 통계·예시가 담긴 단계예요.",
+  "끝":"본문 내용 요약, 대상의 의의·가치 강조, 독자에게 당부하는 단계예요."
+};
+
+const ESSAYS=[
+ {title:"방탄소년단(BTS)은 어떤 그룹인가",
+  paras:[
+   {id:"b0",struct:"처음",
+    text:"전 세계 음악 차트를 석권하고, 유엔 총회에서 연설한 아이돌 그룹이 있다. BTS란 2013년 빅히트 엔터테인먼트에서 데뷔한 7인조 남성 그룹으로, 대중음악과 사회적 메시지를 결합한 활동으로 전 세계적인 주목을 받고 있다. 이 글에서는 BTS의 구성과 음악적 특징, 그리고 그들이 미친 영향을 살펴보겠다.",
+    markers:[{word:"BTS란",method:"정의"}]},
+   {id:"b1",struct:"중간",
+    text:"BTS는 RM, 진, 슈가, 제이홉, 지민, 뷔, 정국으로 구성된다. 역할에 따라 크게 래퍼 라인(RM·슈가·제이홉)과 보컬 라인(진·지민·뷔·정국)으로 구분된다. 각 멤버는 작사·작곡에도 참여하며 자신의 경험과 감정을 음악에 담는다.",
+    markers:[{word:"로 구성된다",method:"분석"},{word:"구분된다",method:"구분"}]},
+   {id:"b2",struct:"중간",
+    text:"BTS의 음악은 목적에 따라 자기 사랑을 주제로 한 'Love Yourself' 시리즈, 성장과 청춘을 담은 'Youth' 시리즈, 사회 문제를 다룬 앨범으로 분류된다. 각 시리즈는 서로 다른 메시지를 담고 있지만 '진정성'이라는 공통된 가치를 지닌다.",
+    markers:[{word:"분류된다",method:"분류"}]},
+   {id:"b3",struct:"중간",
+    text:"일반적인 아이돌 그룹이 기획사 주도로 음악을 만드는 것과 비교하면 마찬가지로 팀 단위로 활동한다는 공통점이 있다. 이와 다르게, BTS는 멤버들이 직접 작사·작곡에 참여하고 사회적 메시지를 전달하는 방식으로 차별화된다.",
+    markers:[{word:"마찬가지로",method:"비교"},{word:"이와 다르게",method:"대조"}]},
+   {id:"b4",struct:"중간",
+    text:"BTS가 전 세계적으로 인기를 얻게 되었다. 그 결과 한국어 학습자 수가 급증하고 한국 문화에 대한 관심이 높아졌다. 예를 들면, 미국 대학교에서 BTS 관련 강의가 개설되고, 유엔 총회에서 청년 세대를 대표해 연설하는 등 문화·사회적 영향력을 발휘하고 있다.",
+    markers:[{word:"그 결과",method:"인과"},{word:"예를 들면",method:"예시"}]},
+   {id:"b5",struct:"끝",
+    text:"BTS는 탄탄한 팀 구성과 진정성 있는 음악으로 전 세계 팬들과 소통하며 K-팝의 위상을 높였다. 그들의 활동은 단순한 음악 그 이상으로, 청소년들에게 '자기 자신을 사랑하라'는 메시지를 전하고 있다. 앞으로도 BTS가 음악을 통해 세상에 긍정적인 변화를 이끌어 가길 기대한다.",
+    markers:[]},
+  ]},
+ {title:"MBTI란 무엇인가",
+  paras:[
+   {id:"mb0",struct:"처음",
+    text:"'너 MBTI가 뭐야?'라는 질문이 자기소개의 필수 코스가 된 요즘, MBTI를 모르면 대화에 끼기 어려울 정도이다. MBTI란 인간의 성격 유형을 분류하는 심리 검사 도구로, 스위스 심리학자 카를 융의 이론을 바탕으로 개발된 성격 유형 지표이다. 이 글에서는 MBTI의 구조와 유형, 그리고 활용 시 주의할 점을 설명하겠다.",
+    markers:[{word:"MBTI란",method:"정의"}]},
+   {id:"mb1",struct:"중간",
+    text:"MBTI는 네 가지 지표로 이루어진다. 첫째 에너지 방향(E/I), 둘째 인식 기능(S/N), 셋째 판단 기능(T/F), 넷째 생활 양식(J/P)이다. 이 네 지표의 조합에 따라 총 16가지 성격 유형으로 구분된다.",
+    markers:[{word:"로 이루어진다",method:"분석"},{word:"구분된다",method:"구분"}]},
+   {id:"mb2",struct:"중간",
+    text:"16가지 유형은 성격의 경향에 따라 분석가형(NT), 외교관형(NF), 관리자형(SJ), 탐험가형(SP)으로 분류된다. 각 그룹은 공통된 가치관과 사고 방식을 가진 유형들을 묶은 것이다.",
+    markers:[{word:"분류된다",method:"분류"}]},
+   {id:"mb3",struct:"중간",
+    text:"예를 들면, INFP(중재자형)는 이상주의적이고 공감 능력이 뛰어나며, ESTJ(관리자형)는 체계적이고 결단력이 강한 경향이 있다. 두 유형은 마찬가지로 자신만의 뚜렷한 가치관을 지닌다는 공통점이 있지만, 이와 다르게 의사결정 방식과 대인 관계 스타일은 크게 차이가 난다.",
+    markers:[{word:"예를 들면",method:"예시"},{word:"마찬가지로",method:"비교"},{word:"이와 다르게",method:"대조"}]},
+   {id:"mb4",struct:"중간",
+    text:"MBTI 검사가 널리 퍼졌다. 그 결과 자신의 강점과 약점을 이해하고 타인과의 소통 방식을 개선하는 데 도움이 되고 있다. 그러나 MBTI가 성격을 단순화하기 때문에 한 사람의 복잡한 내면을 16가지 유형으로만 설명하기에는 한계가 있다.",
+    markers:[{word:"그 결과",method:"인과"},{word:"때문에",method:"인과"}]},
+   {id:"mb5",struct:"끝",
+    text:"MBTI는 자기 이해와 타인 이해를 돕는 유용한 도구이지만, 사람을 유형으로만 규정하는 것은 위험하다. '나는 이런 유형이니까 어쩔 수 없어'가 아니라, 서로의 다름을 이해하는 출발점으로 활용하는 자세가 필요하다.",
+    markers:[]},
+  ]},
+ {title:"학생 참여 활동이 중요한 이유",
+  paras:[
+   {id:"p0",struct:"처음",
+    text:"수업 시간에 선생님의 설명을 듣기만 하는 것과 직접 토론하고 실험하는 것 중 어느 쪽이 더 기억에 오래 남을까? 학생 참여 활동이란 수업에서 학생이 수동적인 청취자가 아니라 토론, 발표, 실험, 프로젝트 등 다양한 방식으로 능동적으로 참여하는 활동을 말한다. 이 글에서는 학생 참여 활동이 왜 중요한지 그 이유를 설명하겠다.",
+    markers:[{word:"학생 참여 활동이란",method:"정의"}]},
+   {id:"p1",struct:"중간",
+    text:"학생 참여 활동은 방식에 따라 크게 세 가지로 구분된다. 첫째, 토론·발표처럼 언어를 매개로 하는 언어적 참여, 둘째, 실험·제작처럼 손으로 직접 수행하는 활동적 참여, 셋째, 자기 평가·성찰 일지처럼 자신을 돌아보는 성찰적 참여가 있다.",
+    markers:[{word:"구분된다",method:"구분"}]},
+   {id:"p2",struct:"중간",
+    text:"교사 중심의 강의식 수업과 비교하면 마찬가지로 지식을 전달한다는 공통점이 있다. 이에 반하여, 학생 참여 활동은 학생이 스스로 문제를 탐구하고 동료와 소통하면서 지식을 내면화할 수 있다는 점에서 크게 다르다.",
+    markers:[{word:"마찬가지로",method:"비교"},{word:"이에 반하여",method:"대조"}]},
+   {id:"p3",struct:"중간",
+    text:"학생이 수업에 능동적으로 참여하기 때문에 단순 암기보다 깊은 이해가 이루어진다. 그 결과 비판적 사고력과 협업 능력, 의사소통 능력 등 미래 사회에서 필요한 역량이 자연스럽게 길러진다.",
+    markers:[{word:"때문에",method:"인과"},{word:"그 결과",method:"인과"}]},
+   {id:"p4",struct:"중간",
+    text:"예를 들면, 모둠 토론에 참여한 학생들은 자신의 의견을 논리적으로 표현하는 능력이 향상되고, 프로젝트 활동을 경험한 학생들은 문제 해결력과 창의성이 높아진다는 연구 결과가 있다.",
+    markers:[{word:"예를 들면",method:"예시"}]},
+   {id:"p5",struct:"끝",
+    text:"학생 참여 활동은 지식 전달을 넘어 학생이 자신의 삶과 연결된 학습을 경험하게 해 준다는 점에서 큰 의의가 있다. 수업 시간에 적극적으로 참여하는 습관이 여러분의 미래를 더욱 풍요롭게 만들어 줄 것이다.",
+    markers:[]},
+  ]},
+ {title:"학교 공부를 생활 속에 활용하는 방법",
+  paras:[
+   {id:"l0",struct:"처음",
+    text:"'이걸 배워서 어디에 써?'라는 생각이 든 적이 있는가? 학교에서 배운 지식이란 단순한 시험 점수가 아니라 실생활의 문제를 해결하는 데 직접 활용할 수 있는 살아 있는 도구이다. 이 글에서는 각 교과에서 배운 내용을 어떻게 일상생활에 연결할 수 있는지 살펴보겠다.",
+    markers:[{word:"학교에서 배운 지식이란",method:"정의"}]},
+   {id:"l1",struct:"중간",
+    text:"학교 교과목은 성격에 따라 언어·사고 영역(국어·영어), 수리·논리 영역(수학·과학), 사회·인문 영역(사회·역사), 예체능 영역(음악·미술·체육)으로 분류된다. 각 영역은 일상생활의 서로 다른 장면에서 활용된다.",
+    markers:[{word:"분류된다",method:"분류"}]},
+   {id:"l2",struct:"중간",
+    text:"예를 들면, 수학 시간에 배운 비율과 백분율은 마트에서 할인율을 계산할 때, 과학 시간에 배운 힘과 에너지는 자전거를 탈 때 효율적인 방법을 찾을 때 활용된다. 국어 시간에 익힌 설득하는 글쓰기는 친구나 부모님께 자신의 의견을 전달할 때 바로 쓸 수 있다.",
+    markers:[{word:"예를 들면",method:"예시"}]},
+   {id:"l3",struct:"중간",
+    text:"단순히 교과서 내용을 암기하는 학습과 비교하면 마찬가지로 지식을 습득한다는 공통점이 있다. 이와 다르게, 생활 속에서 직접 활용하는 학습은 '왜 배우는가'라는 의미를 깨닫게 해 주기 때문에 훨씬 오래 기억에 남는다.",
+    markers:[{word:"마찬가지로",method:"비교"},{word:"이와 다르게",method:"대조"},{word:"때문에",method:"인과"}]},
+   {id:"l4",struct:"중간",
+    text:"배운 내용을 생활에서 의식적으로 찾아 적용하는 습관을 기르면 그 결과 학습 동기가 높아지고 지식이 더 단단하게 쌓인다. 이처럼 학교 공부와 생활이 연결될수록 배움의 즐거움도 커진다.",
+    markers:[{word:"그 결과",method:"인과"}]},
+   {id:"l5",struct:"끝",
+    text:"학교에서 배우는 모든 교과목은 생활 속 어딘가에 반드시 연결되어 있다. '이게 왜 필요하지?'라는 질문을 던지고 스스로 연결 고리를 찾는 습관이 진짜 공부의 시작이다. 배운 것을 오늘 하루 생활 속에서 한 가지라도 직접 써 보자.",
+    markers:[]},
+  ]},
+ {title:"친구의 입장을 이해하는 태도가 중요한 이유",
+  paras:[
+   {id:"f0",struct:"처음",
+    text:"같은 상황을 두고 나는 아무렇지 않은데 친구는 크게 상처받는 경우, 혹은 그 반대의 경우를 겪어 본 적 있는가? 친구의 입장을 이해하는 태도란 상대방의 경험과 감정을 자신의 기준이 아닌 상대방의 관점에서 바라보고 공감하려는 마음가짐을 말한다. 이 글에서는 그 태도가 왜 중요한지 설명하겠다.",
+    markers:[{word:"친구의 입장을 이해하는 태도란",method:"정의"}]},
+   {id:"f1",struct:"중간",
+    text:"공감 능력은 발휘 방식에 따라 인지적 공감과 정서적 공감으로 구분된다. 인지적 공감은 '저 사람은 왜 저런 생각을 할까?'처럼 상대의 관점을 논리적으로 이해하는 것이고, 정서적 공감은 상대의 감정을 함께 느끼는 것이다.",
+    markers:[{word:"구분된다",method:"구분"}]},
+   {id:"f2",struct:"중간",
+    text:"자신의 입장만 고집하는 태도와 비교하면 마찬가지로 자신의 생각이 있다는 점은 같다. 이에 반하여, 친구의 입장을 이해하려는 태도는 갈등을 대화로 해결하고 관계를 더 깊게 만드는 힘이 있다는 점에서 근본적으로 다르다.",
+    markers:[{word:"마찬가지로",method:"비교"},{word:"이에 반하여",method:"대조"}]},
+   {id:"f3",struct:"중간",
+    text:"친구의 입장을 이해하지 못하기 때문에 작은 오해가 큰 갈등으로 번지는 경우가 많다. 반면, 서로의 입장을 충분히 이해하면 그 결과 갈등이 줄어들고 신뢰를 바탕으로 한 관계가 형성된다.",
+    markers:[{word:"때문에",method:"인과"},{word:"반면",method:"대조"},{word:"그 결과",method:"인과"}]},
+   {id:"f4",struct:"중간",
+    text:"예를 들면, 친구가 갑자기 말이 없어졌을 때 '나한테 화가 났나?'라고만 생각하는 대신 '요즘 힘든 일이 있을 수도 있겠다'라고 생각해 보는 것만으로도 관계가 달라진다. 또한 갈등 상황에서 상대가 왜 그런 행동을 했는지 먼저 물어보는 습관도 좋은 방법이다.",
+    markers:[{word:"예를 들면",method:"예시"}]},
+   {id:"f5",struct:"끝",
+    text:"친구의 입장을 이해하는 태도는 좋은 관계의 출발점이자, 더불어 살아가는 사회에서 반드시 필요한 역량이다. '내가 저 친구라면 어떤 기분일까?'라는 질문을 매일 한 번씩 떠올려 보는 것이 공감 능력을 키우는 첫걸음이다.",
+    markers:[]},
+  ]},
+ ,{title:"자율주행차란 무엇인가",
+  paras:[
+   {id:"av0",struct:"처음",
+    text:"운전대 없이 스스로 달리는 자동차가 도로를 누비는 세상이 곧 온다. 자율주행차란 사람이 직접 조작하지 않아도 센서와 인공지능이 주변 환경을 인식하여 스스로 주행하는 자동차를 말한다. 이 글에서는 자율주행차의 작동 원리와 단계, 그리고 우리 생활에 미치는 영향을 살펴보겠다.",
+    markers:[{word:"자율주행차란",method:"정의"}]},
+   {id:"av1",struct:"중간",
+    text:"자율주행차는 크게 인지, 판단, 제어라는 세 가지 핵심 요소로 이루어진다. 인지는 카메라·레이더·라이다 센서로 주변 상황을 파악하는 단계, 판단은 인공지능이 수집된 정보를 분석해 주행 경로를 결정하는 단계, 제어는 실제로 핸들·가속·제동 장치를 작동하는 단계이다.",
+    markers:[{word:"로 이루어진다",method:"분석"}]},
+   {id:"av2",struct:"중간",
+    text:"자율주행 기술은 자동화 수준에 따라 레벨 0부터 레벨 5까지 구분된다. 레벨 0은 완전 수동 운전, 레벨 2는 차선 유지·크루즈 컨트롤 같은 부분 자동화, 레벨 4는 특정 구역에서의 완전 자율주행, 레벨 5는 모든 환경에서의 완전 자율주행이다.",
+    markers:[{word:"구분된다",method:"구분"}]},
+   {id:"av3",struct:"중간",
+    text:"일반 자동차와 비교하면 마찬가지로 도로 위를 달리며 사람을 목적지까지 이동시킨다는 공통점이 있다. 이와 다르게, 자율주행차는 스스로 판단하고 움직이기 때문에 운전 중 다른 활동이 가능하고 인간의 실수로 인한 사고를 줄일 수 있다.",
+    markers:[{word:"마찬가지로",method:"비교"},{word:"이와 다르게",method:"대조"},{word:"때문에",method:"인과"}]},
+   {id:"av4",struct:"중간",
+    text:"자율주행 기술이 발전한 그 결과, 교통사고 사망자 감소와 교통 흐름 최적화가 가능해질 것으로 기대된다. 예를 들면, 미국 도로교통안전국에 따르면 교통사고의 약 94%가 인간의 실수에서 비롯되는데, 자율주행차는 이를 크게 줄일 수 있다.",
+    markers:[{word:"그 결과",method:"인과"},{word:"예를 들면",method:"예시"}]},
+   {id:"av5",struct:"끝",
+    text:"자율주행차는 단순한 편의 장치가 아니라 교통 안전, 에너지 효율, 이동 약자 지원 등 사회 전반에 변화를 가져올 기술이다. 기술의 발전과 함께 법과 윤리, 보안 문제에 대한 사회적 논의도 함께 이루어져야 할 것이다.",
+    markers:[]},
+  ]}
+];
+
+// ════════════════════════════════════════
+// 상태
+// ════════════════════════════════════════
+
+// ════════════════════════════════════════
+// 3단계 글쓰기 데이터
+// targetIdx: 빠진 문단 인덱스 (앞뒤 문단이 맥락)
+// methods: 반드시 사용해야 할 설명 방법 목록
+// markers: 사용 권장 표지어
+// model: 모범 예시 문단
+// ════════════════════════════════════════
+const WRITING = [
+ {targetIdx:3,methods:["비교","대조"],
+  markers:["마찬가지로","이와 다르게"],
+  hint:"일반 아이돌 그룹과 BTS의 공통점을 먼저 쓴 뒤, 표지어를 사용해 차이점을 드러내 보세요.",
+  model:"일반적인 아이돌 그룹이 기획사 주도로 음악을 만드는 것과 비교하면 마찬가지로 팀 단위로 활동한다는 공통점이 있다. 이와 다르게, BTS는 멤버들이 직접 작사·작곡에 참여하고 사회적 메시지를 전달하는 방식으로 차별화된다."},
+ {targetIdx:2,methods:["분류"],
+  markers:["분류된다"],
+  hint:"16가지 유형을 공통된 속성에 따라 묶어 카테고리를 만들어 보세요. 각 그룹의 특징도 함께 써 주세요.",
+  model:"16가지 유형은 성격의 경향에 따라 분석가형(NT), 외교관형(NF), 관리자형(SJ), 탐험가형(SP)으로 분류된다. 각 그룹은 공통된 가치관과 사고 방식을 가진 유형들을 묶은 것이다."},
+ {targetIdx:2,methods:["비교","대조"],
+  markers:["마찬가지로","이에 반하여"],
+  hint:"강의식 수업과 참여 수업의 공통점을 먼저 밝히고, 차이점을 표지어로 강조해 보세요.",
+  model:"교사 중심의 강의식 수업과 비교하면 마찬가지로 지식을 전달한다는 공통점이 있다. 이에 반하여, 학생 참여 활동은 학생이 스스로 문제를 탐구하고 동료와 소통하면서 지식을 내면화할 수 있다는 점에서 크게 다르다."},
+ {targetIdx:3,methods:["비교","대조","인과"],
+  markers:["마찬가지로","이와 다르게","때문에"],
+  hint:"암기식 학습과 활용 학습의 공통점, 차이점을 쓰고 활용 학습이 더 효과적인 이유(인과)를 덧붙여 보세요.",
+  model:"단순히 교과서 내용을 암기하는 학습과 비교하면 마찬가지로 지식을 습득한다는 공통점이 있다. 이와 다르게, 생활 속에서 직접 활용하는 학습은 '왜 배우는가'라는 의미를 깨닫게 해 주기 때문에 훨씬 오래 기억에 남는다."},
+ {targetIdx:3,methods:["인과","대조"],
+  markers:["때문에","반면","그 결과"],
+  hint:"공감 부족이 갈등을 만드는 인과 관계를 쓰고, 공감할 때와 못 할 때의 차이를 대조로 표현해 보세요.",
+  model:"친구의 입장을 이해하지 못하기 때문에 작은 오해가 큰 갈등으로 번지는 경우가 많다. 반면, 서로의 입장을 충분히 이해하면 그 결과 갈등이 줄어들고 신뢰를 바탕으로 한 관계가 형성된다."},
+ ,{targetIdx:3,methods:["비교","대조","인과"],
+  markers:["마찬가지로","이와 다르게","때문에"],
+  hint:"일반 자동차와 자율주행차의 공통점을 먼저 쓰고, 차이점과 그로 인한 장점을 표지어를 사용해 써 보세요.",
+  model:"일반 자동차와 비교하면 마찬가지로 도로 위를 달리며 사람을 목적지까지 이동시킨다는 공통점이 있다. 이와 다르게, 자율주행차는 스스로 판단하고 움직이기 때문에 운전 중 다른 활동이 가능하고 인간의 실수로 인한 사고를 줄일 수 있다."}
+];
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbylOfMZX759sWp-lbL2s7mB882GM31y7r92wfhmafgYwEBBq6_dpxs20UkDDB2wgXeC/exec";
+
+async function postScore(data){
+  try{
+    await fetch(SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)});
+  }catch(e){console.warn("전송 실패",e);}
+}
+
+// loadScores: 이 세션에서 입력된 점수만 표시 (새로고침하면 초기화)
+function loadScores(){
+  renderScoreboard();
+}
+
+let curE=0, curStep=0;
+let arrPlacement={}, arrChecked=false, poolOrder=null, draggingId=null;
+let markerState={}, markerRevealed=false, activePopup=null;
+let scores=[];
+
+// ════════════════════════════════════════
+// 타이머
+// ════════════════════════════════════════
+let timerTotal=0, timerLeft=0, timerInterval=null, timerRunning=false;
+
+document.getElementById("timer-select").addEventListener("change", function(){
+  const v=parseInt(this.value);
+  if(v===0){document.getElementById("timer-bar").style.display="none";}
+  else{
+    timerTotal=v; timerLeft=v; timerRunning=false;
+    clearInterval(timerInterval);
+    document.getElementById("timer-bar").style.display="flex";
+    renderTimerDisplay();
+  }
+});
+
+function renderTimerDisplay(){
+  const m=Math.floor(timerLeft/60), s=timerLeft%60;
+  const disp=document.getElementById("timer-display");
+  disp.textContent=`${m}:${s.toString().padStart(2,"0")}`;
+  disp.classList.toggle("urgent", timerLeft<=30 && timerLeft>0);
+  const pct=timerTotal>0?timerLeft/timerTotal*100:100;
+  const prog=document.getElementById("timer-prog");
+  prog.style.width=pct+"%";
+  prog.classList.toggle("urgent", timerLeft<=30);
+}
+function startTimer(){
+  if(timerRunning||timerLeft<=0) return;
+  timerRunning=true;
+  timerInterval=setInterval(()=>{
+    timerLeft--;
+    renderTimerDisplay();
+    if(timerLeft<=0){
+      clearInterval(timerInterval); timerRunning=false;
+      document.getElementById("timer-end-popup").style.display="flex";
+    }
+  },1000);
+}
+function pauseTimer(){clearInterval(timerInterval);timerRunning=false;}
+function resetTimer(){
+  clearInterval(timerInterval); timerRunning=false;
+  timerLeft=timerTotal; renderTimerDisplay();
+}
+function closeTimerEnd(){document.getElementById("timer-end-popup").style.display="none";}
+
+// ════════════════════════════════════════
+// 탭 / 단계
+// ════════════════════════════════════════
+function renderEssayTabs(){
+  document.getElementById("essay-tabs").innerHTML=
+    ESSAYS.map((e,i)=>`<button class="etab${i===curE?" active":""}" onclick="selectEssay(${i})">${i+1}. ${e.title}</button>`).join("");
+}
+function selectEssay(i){
+  curE=i; curStep=0;
+  arrChecked=false; poolOrder=null;
+  markerState={}; markerRevealed=false; writingSubmitted=false;
+  document.getElementById("arr-result").innerHTML="";
+  document.getElementById("marker-result").innerHTML="";
+  document.getElementById("writing-area").innerHTML="";
+  document.getElementById("complete-banner").classList.remove("show");
+  initArr();  // 새 설명문 문단들을 pool에 등록
+  renderEssayTabs(); renderStepTabs(); showStep(0); renderArrange(); updateArrScore();
+}
+function renderStepTabs(){
+  const s0=document.getElementById("stab-0");
+  const s1=document.getElementById("stab-1");
+  const s2=document.getElementById("stab-2");
+  const i1=document.getElementById("stab1-icon");
+  const i2=document.getElementById("stab2-icon");
+  s0.classList.toggle("active", curStep===0);
+  s1.classList.toggle("active", curStep===1);
+  s2.classList.toggle("active", curStep===2);
+  const step1ok=arrChecked;
+  const step2ok=markerRevealed;
+  s1.classList.toggle("locked", !step1ok);
+  s2.classList.toggle("locked", !step2ok);
+  i1.className=step1ok?"ti ti-text-size":"ti ti-lock";
+  i2.className=step2ok?"ti ti-pencil":"ti ti-lock";
+}
+function goStep(n){
+  if(n===1&&!arrChecked) return;
+  if(n===2&&!markerRevealed) return;
+  curStep=n; renderStepTabs(); showStep(n);
+  if(n===1){renderQuiz(); updateQuizScore();}
+  if(n===2){renderWriting();}
+}
+function showStep(n){
+  document.getElementById("step-0").style.display=n===0?"block":"none";
+  document.getElementById("step-1").style.display=n===1?"block":"none";
+  document.getElementById("step-2").style.display=n===2?"block":"none";
+}
+
+// ════════════════════════════════════════
+// 1단계: 배치 활동
+// ════════════════════════════════════════
+function initArr(){
+  arrPlacement={}; arrChecked=false; poolOrder=null;
+  ESSAYS[curE].paras.forEach(p=>arrPlacement[p.id]="pool");
+}
+function shuffled(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+
+function cardHTML(para){
+  const zone=arrPlacement[para.id];
+  const inZone=zone!=="pool";
+  let cls="card";
+  if(arrChecked&&inZone){cls+=zone===para.struct?" correct":" wrong";}
+  const draggable=!arrChecked;
+  const explain=arrChecked&&inZone&&zone!==para.struct
+    ?`<div class="explain-tag">이 문단은 '${para.struct}' 단계예요. ${EXPLAINS[para.struct]}</div>`:"";
+  return `<div class="${cls}" id="card-${para.id}"
+    ${draggable?`draggable="true"
+      ondragstart="onDragStart(event,'${para.id}')"
+      ondragend="onDragEnd(event)"
+      ontouchstart="onTS(event,'${para.id}')"
+      ontouchmove="onTM(event)"
+      ontouchend="onTE(event)"`:""}
+  >${para.text}${explain}</div>`;
+}
+
+function renderArrange(){
+  renderPool(); renderZones(); updateCheckBtn();
+}
+function renderPool(){
+  const pool=document.getElementById("pool");
+  const items=ESSAYS[curE].paras.filter(p=>arrPlacement[p.id]==="pool");
+  if(!poolOrder) poolOrder=shuffled(items.map(p=>p.id));
+  const ordered=poolOrder.map(id=>items.find(p=>p.id===id)).filter(Boolean);
+  pool.innerHTML=ordered.length
+    ?ordered.map(cardHTML).join("")
+    :`<div class="notice-empty">모든 카드를 배치했어요</div>`;
+}
+function renderZones(){
+  ["처음","중간","끝"].forEach(z=>{
+    const el=document.getElementById(`zone-${z}`);
+    const label=el.querySelector(".zone-label").outerHTML;
+    const items=ESSAYS[curE].paras.filter(p=>arrPlacement[p.id]===z);
+    el.innerHTML=label+(items.length
+      ?items.map(cardHTML).join("")
+      :`<div class="notice-empty">카드를 여기에 놓으세요</div>`);
+    el.ondragover=e=>onDragOver(e,el);
+    el.ondrop=e=>onDrop(e,z);
+    el.ondragleave=()=>onDragLeave(el);
+  });
+}
+function updateArrScore(){
+  const total=ESSAYS[curE].paras.length;
+  const placed=Object.values(arrPlacement).filter(v=>v!=="pool").length;
+  document.getElementById("arr-score").textContent=`${placed} / ${total} 배치됨`;
+}
+function updateCheckBtn(){
+  const total=ESSAYS[curE].paras.length;
+  const placed=Object.values(arrPlacement).filter(v=>v!=="pool").length;
+  const allPlaced=placed===total;
+  const btn=document.getElementById("check-btn");
+  const icon=document.getElementById("check-icon");
+  btn.classList.toggle("locked",!allPlaced);
+  icon.className=allPlaced?"ti ti-check":"ti ti-lock";
+}
+function checkArrange(){
+  const total=ESSAYS[curE].paras.length;
+  const placed=Object.values(arrPlacement).filter(v=>v!=="pool").length;
+  if(placed<total){
+    const tip=document.getElementById("arr-lock-tip");
+    tip.classList.add("show"); setTimeout(()=>tip.classList.remove("show"),2000);
+    return;
+  }
+  arrChecked=true;
+  let correct=0;
+  ESSAYS[curE].paras.forEach(p=>{if(arrPlacement[p.id]===p.struct)correct++;});
+  renderZones();
+  showArrResult(correct,total);
+  renderStepTabs();
+  saveScore("step0",correct,total);
+}
+function showArrResult(correct,total){
+  const pct=Math.round(correct/total*100);
+  const msgs=["다시 도전해 보세요!","조금 더 생각해 보세요!","잘하고 있어요!","거의 다 맞혔어요!","완벽해요!"];
+  const sections=["처음","중간","끝"].map(z=>{
+    const items=ESSAYS[curE].paras.filter(p=>arrPlacement[p.id]===z);
+    const paras=items.map(p=>{
+      const ok=p.struct===z;
+      return `<div class="result-para" style="background:${ok?"var(--green-bg)":"var(--red-bg)"};border-left-color:${ok?"var(--green)":"var(--red)"};color:${ok?"var(--green)":"var(--red)"}">${ok?"✓":"✗"} ${p.text}
+        ${!ok?`<div class="result-explain">'${p.struct}' 단계 — ${EXPLAINS[p.struct]}</div>`:""}
+      </div>`;
+    }).join("");
+    return `<div><div class="result-zone" style="color:${ZONE_C[z]}">${z}</div>${paras||`<div style="font-size:12px;color:var(--text3)">비어 있음</div>`}</div>`;
+  }).join("");
+  document.getElementById("arr-result").innerHTML=`
+    <div class="result-box">
+      <div class="result-head">${correct}/${total}개 정답 (${pct}점) — ${msgs[Math.min(Math.floor(pct/21),4)]}</div>
+      <div class="result-body">${sections}</div>
+    </div>
+    <div style="margin-top:12px">
+      <button class="btn primary" onclick="goStep(1)"><i class="ti ti-arrow-right" aria-hidden="true"></i> 2단계로 이동</button>
+    </div>`;
+}
+function resetArrange(){
+  poolOrder=null; arrChecked=false;
+  ESSAYS[curE].paras.forEach(p=>arrPlacement[p.id]="pool");
+  document.getElementById("arr-result").innerHTML="";
+  renderArrange(); updateArrScore(); renderStepTabs();
+}
+
+// drag
+function onDragStart(e,id){
+  draggingId=id; e.dataTransfer.effectAllowed="move";
+  setTimeout(()=>{const el=document.getElementById(`card-${id}`);if(el)el.classList.add("dragging");},0);
+}
+function onDragEnd(){
+  if(draggingId){const el=document.getElementById(`card-${draggingId}`);if(el)el.classList.remove("dragging");}
+  draggingId=null;
+  document.querySelectorAll(".drag-over").forEach(el=>el.classList.remove("drag-over"));
+}
+function onDragOver(e,el){e.preventDefault();el.classList.add("drag-over");}
+function onDragLeave(el){el.classList.remove("drag-over");}
+function onDrop(e,target){
+  e.preventDefault();
+  if(!draggingId) return;
+  document.querySelectorAll(".drag-over").forEach(el=>el.classList.remove("drag-over"));
+  arrPlacement[draggingId]=target; draggingId=null;
+  renderArrange(); updateArrScore();
+}
+
+// touch
+let _tid=null,_tclone=null;
+function onTS(e,id){
+  _tid=id;
+  const orig=document.getElementById(`card-${id}`);
+  _tclone=orig.cloneNode(true);
+  const r=orig.getBoundingClientRect();
+  _tclone.style.cssText=`position:fixed;z-index:9999;pointer-events:none;opacity:.8;width:${orig.offsetWidth}px;left:${r.left}px;top:${r.top}px;`;
+  document.body.appendChild(_tclone);
+  orig.classList.add("dragging");
+}
+function onTM(e){
+  if(!_tclone) return; e.preventDefault();
+  const t=e.touches[0];
+  _tclone.style.left=(t.clientX-_tclone.offsetWidth/2)+"px";
+  _tclone.style.top=(t.clientY-24)+"px";
+}
+function onTE(e){
+  if(!_tid||!_tclone) return;
+  const t=e.changedTouches[0];
+  _tclone.style.display="none";
+  const below=document.elementFromPoint(t.clientX,t.clientY);
+  _tclone.style.display="";
+  let target="pool";
+  if(below){
+    const z=below.closest(".zone"); const pl=below.closest(".pool");
+    if(z) target=z.id.replace("zone-","");
+    else if(pl) target="pool";
+  }
+  arrPlacement[_tid]=target;
+  document.body.removeChild(_tclone); _tclone=null;
+  const orig=document.getElementById(`card-${_tid}`);
+  if(orig) orig.classList.remove("dragging");
+  _tid=null;
+  renderArrange(); updateArrScore();
+}
+
+// ════════════════════════════════════════
+// 2단계: 표지어 퀴즈
+// ════════════════════════════════════════
+function mkey(pi,word){return `${curE}-${pi}-${word}`;}
+function totalM(){return ESSAYS[curE].paras.reduce((s,p)=>s+p.markers.length,0);}
+function foundM(){return ESSAYS[curE].paras.reduce((s,p,pi)=>s+p.markers.filter(m=>markerState[mkey(pi,m.word)]==="correct").length,0);}
+function allCorrectM(){return foundM()===totalM();}
+
+function escH(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function escA(s){return s.replace(/\\/g,"\\\\").replace(/'/g,"\\'");}
+
+function tokenize(text,markers,pi){
+  if(!markers.length) return escH(text);
+  const sorted=[...markers].sort((a,b)=>b.word.length-a.word.length);
+  let segs=[{t:text,isM:false,word:""}];
+  for(const m of sorted){
+    const next=[];
+    for(const seg of segs){
+      if(seg.isM){next.push(seg);continue;}
+      const parts=seg.t.split(m.word);
+      for(let i=0;i<parts.length;i++){
+        if(parts[i]) next.push({t:parts[i],isM:false,word:""});
+        if(i<parts.length-1) next.push({t:m.word,isM:true,word:m.word});
+      }
+    }
+    segs=next;
+  }
+  return segs.map(seg=>{
+    if(!seg.isM) return escH(seg.t);
+    const k=mkey(pi,seg.word);
+    const st=markerState[k];
+    const rev=markerRevealed;
+    let cls="word-span";
+    if(st==="correct") cls+=" state-correct";
+    else if(rev) cls+=" state-revealed";
+    const m=markers.find(m=>m.word===seg.word);
+    const badge=(st==="correct"||rev)
+      ?`<span class="m-badge" style="background:${MB[m.method]};color:${MC[m.method]}">${m.method}</span>`:"";
+    const clickable=!rev&&st!=="correct";
+    return `<span class="${cls}"${clickable?` onclick="openPopup(${pi},'${escA(seg.word)}')"`:""} >${escH(seg.t)}</span>${badge}`;
+  }).join("");
+}
+
+function renderQuiz(){
+  document.getElementById("passage").innerHTML=
+    ESSAYS[curE].paras.map((p,pi)=>`
+      <div class="para-card">
+        <div class="para-num">문단 ${pi+1}${p.markers.length?` — 표지어 ${p.markers.length}개`:""}</div>
+        <div class="para-text">${tokenize(p.text,p.markers,pi)}</div>
+      </div>`).join("");
+}
+function updateQuizScore(){
+  const found=foundM(),total=totalM();
+  document.getElementById("sc-found").textContent=found;
+  document.getElementById("sc-total").textContent=total;
+  const pct=total?Math.round(found/total*100):0;
+  const msgs=["표지어를 클릭해 설명 방법을 맞혀 보세요!","잘 찾고 있어요!","절반 이상 찾았어요!","거의 다 왔어요!","모두 맞혔어요!"];
+  document.getElementById("sc-msg").textContent=msgs[Math.min(Math.floor(pct/25),4)];
+  const allOk=allCorrectM();
+  document.getElementById("complete-banner").classList.toggle("show",allOk&&total>0);
+  const btn=document.getElementById("reveal-btn");
+  const icon=document.getElementById("reveal-icon");
+  const label=document.getElementById("reveal-label");
+  btn.classList.toggle("locked",!allOk);
+  icon.className=allOk?"ti ti-eye":"ti ti-lock";
+  label.textContent="정답 공개";
+  if(allOk&&total>0) saveScore("step1",found,total);
+}
+
+function openPopup(pi,word){
+  const k=mkey(pi,word);
+  if(markerState[k]==="correct") return;
+  const marker=ESSAYS[curE].paras[pi].markers.find(m=>m.word===word);
+  if(!marker) return;
+  activePopup={k,pi,word,method:marker.method};
+  document.getElementById("pw-word").textContent=`"${word}"`;
+  const fb=document.getElementById("pw-fb");
+  fb.style.display="none"; fb.className="popup-fb";
+  const wrong=METHODS.filter(m=>m!==marker.method).sort(()=>Math.random()-.5).slice(0,3);
+  const choices=[marker.method,...wrong].sort(()=>Math.random()-.5);
+  document.getElementById("pw-grid").innerHTML=choices.map(m=>{
+    const info=METHOD_INFO[m];
+    const label=info?info.label:m;
+    return `<button class="m-btn" data-method="${m}" onclick="chooseMethod('${m}')">
+      <span class="mn"><span style="width:8px;height:8px;border-radius:50%;background:${MC[m]};display:inline-block;flex-shrink:0"></span>${label}</span>
+    </button>`;
+  }).join("");
+  document.getElementById("popup").style.display="flex";
+}
+function chooseMethod(chosen){
+  if(!activePopup) return;
+  const {k,method}=activePopup;
+  const correct=chosen===method;
+  document.querySelectorAll(".m-btn").forEach(btn=>{
+    const bm=btn.dataset.method;
+    if(bm===method) btn.classList.add("ok");
+    if(bm===chosen&&!correct) btn.classList.add("ng");
+    btn.disabled=true;
+  });
+  const fb=document.getElementById("pw-fb");
+  fb.style.display="block";
+  if(correct){
+    fb.className="popup-fb fb-ok"; fb.textContent="✓ 정답이에요!";
+    markerState[k]="correct";
+    setTimeout(()=>{closePopup();renderQuiz();updateQuizScore();},700);
+  } else {
+    const correctLabel=METHOD_INFO[method]?METHOD_INFO[method].label:method;
+    fb.className="popup-fb fb-ng"; fb.textContent=`✗ 정답은 '${correctLabel}'예요.`;
+  }
+}
+function onOverlayClick(e){if(e.target===document.getElementById("popup"))closePopup();}
+function closePopup(){document.getElementById("popup").style.display="none";activePopup=null;}
+
+function revealMarkers(){
+  if(!allCorrectM()){
+    const tip=document.getElementById("quiz-lock-tip");
+    tip.classList.add("show"); setTimeout(()=>tip.classList.remove("show"),2200);
+    return;
+  }
+  markerRevealed=true; renderQuiz();
+  let rows="";
+  ESSAYS[curE].paras.forEach((p,pi)=>{
+    p.markers.forEach(m=>{
+      rows+=`<div class="ans-row">
+        <span class="ans-word">"${m.word}"</span>
+        <span class="m-badge" style="background:${MB[m.method]};color:${MC[m.method]}">${m.method}</span>
+        <span class="ans-check">✓</span>
+      </div>`;
+    });
+  });
+  document.getElementById("marker-result").innerHTML=`
+    <div class="result-box" style="margin-top:1rem">
+      <div class="result-head">표지어 전체 정답 목록</div>
+      <div class="result-body"><div class="ans-list">${rows}</div></div>
+    </div>
+    <div style="margin-top:12px">
+      <button class="btn primary" onclick="goStep(2)"><i class="ti ti-pencil" aria-hidden="true"></i> 3단계로 이동</button>
+    </div>`;
+  renderStepTabs();
+}
+function teacherReveal(){
+  // 교사가 모둠 토의 후 강제로 정답 공개 (모두 못 맞춰도 열림)
+  markerRevealed=true;
+  // 맞히지 못한 표지어도 correct로 처리해 3단계 진입 가능하게
+  ESSAYS[curE].paras.forEach((p,pi)=>{
+    p.markers.forEach(m=>{
+      const k=mkey(pi,m.word);
+      if(markerState[k]!=="correct") markerState[k]="correct";
+    });
+  });
+  renderQuiz();
+  updateQuizScore();
+  // 정답 목록 표시
+  let rows="";
+  ESSAYS[curE].paras.forEach((p,pi)=>{
+    p.markers.forEach(m=>{
+      rows+=`<div class="ans-row">
+        <span class="ans-word">"${m.word}"</span>
+        <span class="m-badge" style="background:${MB[m.method]};color:${MC[m.method]}">${m.method}</span>
+        <span class="ans-check">✓</span>
+      </div>`;
+    });
+  });
+  document.getElementById("marker-result").innerHTML=`
+    <div class="result-box" style="margin-top:1rem">
+      <div class="result-head">표지어 전체 정답 목록 (교사 공개)</div>
+      <div class="result-body"><div class="ans-list">${rows}</div></div>
+    </div>
+    <div style="margin-top:12px">
+      <button class="btn primary" onclick="goStep(2)"><i class="ti ti-pencil" aria-hidden="true"></i> 3단계로 이동</button>
+    </div>`;
+  renderStepTabs();
+}
+
+function resetMarkers(){
+  ESSAYS[curE].paras.forEach((p,pi)=>p.markers.forEach(m=>delete markerState[mkey(pi,m.word)]));
+  markerRevealed=false;
+  document.getElementById("marker-result").innerHTML="";
+  document.getElementById("complete-banner").classList.remove("show");
+  document.getElementById("popup").style.display="none";
+  activePopup=null;
+  renderQuiz(); updateQuizScore();
+}
+
+// ════════════════════════════════════════
+// 점수판
+// ════════════════════════════════════════
+function saveScore(step,correct,total){
+  const team=document.getElementById("team-input").value.trim()||"모둠";
+  const pct=Math.round(correct/total*100);
+  let entry=scores.find(s=>s.team===team&&s.essay===ESSAYS[curE].title);
+  if(!entry){entry={team,essay:ESSAYS[curE].title,step0:null,step1:null};scores.push(entry);}
+  entry[step]={correct,total,pct};
+  // Google Sheets에 전송
+  postScore({
+    team,
+    essay:ESSAYS[curE].title,
+    step0:entry.step0?entry.step0.pct+"점":"—",
+    step1:entry.step1?entry.step1.pct+"점":"—",
+    total:calcTotal(entry)
+  });
+  renderScoreboard();
+}
+function renderScoreboard(){
+  if(!scores.length){
+    document.getElementById("score-grid").innerHTML=`<div style="font-size:13px;color:var(--text3);padding:8px 0">아직 저장된 점수가 없어요. 활동을 완료하거나 새로고침해 보세요.</div>`;
+    return;
+  }
+  document.getElementById("score-grid").innerHTML=scores.map(s=>`
+    <div class="score-card">
+      <div class="sc-team">${s.team} — ${s.essay}</div>
+      ${s.step0?`<div style="font-size:12px;color:var(--green);margin-bottom:2px">문단 배치 ${s.step0.pct}점</div>`:""}
+      ${s.step1?`<div style="font-size:12px;color:var(--blue)">표지어 퀴즈 ${s.step1.pct}점</div>`:""}
+      <div class="sc-score">${calcTotal(s)}</div>
+      <div class="sc-label">종합 점수</div>
+    </div>`).join("");
+}
+function calcTotal(s){
+  let sum=0,cnt=0;
+  if(s.step0){sum+=s.step0.pct;cnt++;}
+  if(s.step1){sum+=s.step1.pct;cnt++;}
+  return cnt?Math.round(sum/cnt)+"점":"—";
+}
+function clearScores(){scores=[];document.getElementById("score-grid").innerHTML=`<div style="font-size:13px;color:var(--text3);padding:8px 0">초기화되었어요.</div>`;}
+
+
+
+// ════════════════════════════════════════
+// 3단계: 문단 쓰기
+// ════════════════════════════════════════
+let writingSubmitted=false;
+
+function renderWriting(){
+  const w=WRITING[curE];
+  const paras=ESSAYS[curE].paras;
+  const ti=w.targetIdx;
+
+  // 앞 문단 (targetIdx-1) / 뒤 문단 (targetIdx+1)
+  const abovePara=ti>0?paras[ti-1]:null;
+  const belowPara=ti<paras.length-1?paras[ti+1]:null;
+
+  const methodChips=w.methods.map(m=>
+    `<span class="method-chip" style="background:${MB[m]};color:${MC[m]}">${m}</span>`
+  ).join("");
+
+  const markerChips=w.markers.map(mk=>
+    `<span class="marker-chip" id="mc-${mk.replace(/[^a-z가-힣]/gi,'_')}" onclick="toggleMarker(this,'${mk}')">${mk}</span>`
+  ).join("");
+
+  const submitted=writingSubmitted;
+  const savedText=document.getElementById("write-ta")?.value||"";
+
+  document.getElementById("writing-area").innerHTML=`
+    <div class="writing-wrap">
+      <div style="font-size:13px;color:var(--text2);padding:6px 0 2px">
+        <strong style="color:var(--text)">앞뒤 문단을 읽고</strong> 가운데 빠진 문단을 완성해 보세요.
+        아래 설명 방법과 표지어를 반드시 사용해야 해요.
+      </div>
+
+      ${abovePara?`
+      <div class="context-card above">
+        <div class="context-label">▲ 앞 문단 (문단 ${ti})</div>
+        ${abovePara.text}
+      </div>`:""}
+
+      <div class="write-box">
+        <div class="write-box-head">
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="font-size:12px;color:var(--text2);font-weight:500">✏️ 여기에 문단 ${ti+1}을 써 보세요</div>
+            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+              <span style="font-size:11px;color:var(--text3)">사용할 설명 방법:</span>
+              <div class="method-chips">${methodChips}</div>
+            </div>
+          </div>
+        </div>
+        <div class="marker-chips" id="marker-chips-row">
+          <span style="font-size:11px;color:var(--text3);margin-right:2px">권장 표지어:</span>
+          ${markerChips}
+        </div>
+        <textarea class="write-textarea" id="write-ta" placeholder="여기에 문단을 써 보세요..."
+          oninput="updateCharCount(this)"
+          ${submitted?"disabled":""}>${submitted?savedText:""}</textarea>
+        <div class="write-footer">
+          <span class="char-count" id="char-count">0자</span>
+          ${!submitted
+            ?`<button class="btn primary" onclick="submitWriting()"><i class="ti ti-send" aria-hidden="true"></i> 제출하기</button>`
+            :`<button class="btn" onclick="reWrite()"><i class="ti ti-refresh" aria-hidden="true"></i> 다시 쓰기</button>`
+          }
+        </div>
+      </div>
+
+      ${belowPara?`
+      <div class="context-card below">
+        <div class="context-label">▼ 뒤 문단 (문단 ${ti+2})</div>
+        ${belowPara.text}
+      </div>`:""}
+
+      <div class="hint-box">
+        <strong>힌트:</strong> ${w.hint}
+      </div>
+
+      ${submitted?renderCompare():""}
+    </div>`;
+
+  if(!submitted) updateCharCount(document.getElementById("write-ta"));
+}
+
+function toggleMarker(el, mk){
+  el.classList.toggle("used");
+}
+
+function updateCharCount(ta){
+  const c=document.getElementById("char-count");
+  if(c) c.textContent=(ta.value.length)+"자";
+}
+
+function submitWriting(){
+  const ta=document.getElementById("write-ta");
+  const text=ta.value.trim();
+  if(text.length<10){
+    ta.style.borderColor="var(--red)";
+    setTimeout(()=>ta.style.borderColor="",1200);
+    return;
+  }
+  writingSubmitted=true;
+
+  // Google Sheets에 전송
+  const team=document.getElementById("team-input").value.trim()||"모둠";
+  postScore({
+    team, essay:ESSAYS[curE].title,
+    step0:"—", step1:"—",
+    total:"[3단계] "+text.substring(0,40)+"…"
+  });
+
+  renderWriting();
+}
+
+function reWrite(){
+  writingSubmitted=false;
+  renderWriting();
+}
+
+function renderCompare(){
+  const w=WRITING[curE];
+  const ta=document.getElementById("write-ta");
+  const userText=ta?ta.value:document.querySelector(".write-textarea")?.value||"";
+
+  // 모범 예시에서 표지어 강조
+  let modelHighlighted=escH(w.model);
+  w.markers.forEach(mk=>{
+    const escaped=mk.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+    modelHighlighted=modelHighlighted.replace(
+      new RegExp(escaped,'g'),
+      `<span class="marker-found">${mk}</span>`
+    );
+  });
+
+  // 학생 글에서 표지어 강조
+  let userHighlighted=escH(userText);
+  w.markers.forEach(mk=>{
+    const escaped=mk.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+    userHighlighted=userHighlighted.replace(
+      new RegExp(escaped,'g'),
+      `<span class="marker-found">${mk}</span>`
+    );
+  });
+
+  // 학생 글에서 사용된 표지어 체크
+  const usedMarkers=w.markers.filter(mk=>userText.includes(mk));
+  const selfCheck=w.markers.map(mk=>{
+    const used=userText.includes(mk);
+    return `<span style="padding:2px 8px;border-radius:8px;font-size:12px;background:${used?"var(--green-bg)":"var(--red-bg)"};color:${used?"var(--green)":"var(--red)"}">${used?"✓":"✗"} ${mk}</span>`;
+  }).join("");
+
+  return `
+    <div class="compare-wrap">
+      <div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px">내 글과 모범 예시 비교</div>
+
+      <div class="compare-card">
+        <div class="compare-head" style="background:var(--blue-bg);color:var(--blue)">내가 쓴 문단</div>
+        <div class="compare-body">${userHighlighted}</div>
+      </div>
+
+      <div class="compare-card">
+        <div class="compare-head" style="background:var(--green-bg);color:var(--green)">모범 예시</div>
+        <div class="compare-body">${modelHighlighted}</div>
+      </div>
+
+      <div style="padding:10px 13px;border-radius:var(--r);background:var(--bg2);border:0.5px solid var(--border)">
+        <div style="font-size:12px;color:var(--text2);margin-bottom:6px">표지어 사용 확인 <span style="color:var(--text3)">(${usedMarkers.length}/${w.markers.length}개 사용)</span></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">${selfCheck}</div>
+      </div>
+    </div>`;
+}
+
+// ════════════════════════════════════════
+// init
+// ════════════════════════════════════════
+renderEssayTabs();
+ESSAYS[0].paras.forEach(p=>arrPlacement[p.id]="pool");
+renderArrange();
+updateArrScore();
+renderStepTabs();
+</script>
+</body>
+</html>
